@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<title>Animacja w Canvas</title>
+			<script type="text/javascript">
+
+			    // Uruchom funkcjê draw po za³adowaniu wszystkich obiektów na stronie.
+			    window.onload = draw;
+                //œledzenie zdarzenia wciœniêcia klawiszy (dodanie obiektu nas³uchuj¹cego do window)
+			    window.addEventListener('keydown', keyDown, true);
+                
+			    var canvas
+			    var context;
+			    var tlo;
+			    var x = 10;
+			    var y = 20;
+			    var dx = 10;
+			    var dy = 15; 
+			    var colors = new Array();
+			    colors[0] = "red";
+			    colors[1] = "pink";
+			    colors[2] = "blue";
+			    colors[3] = "black";
+			    var i;
+                var dirX = 0;
+                var dirY = 0;
+
+			    //zmienne przechowuj¹ce aktualne wspó³rzêdne x, y poruszaj¹cego siê ko³a,   
+                //przesuniêcie dy oraz dx
+                //tablica kolorów - przechowuj¹ca 4 wybrane kolory oraz 
+                //aktualny kolor (i)
+
+			    function keyDown(key) {
+			        if (key.keyCode == 37) { // w lewo
+			            if (dirX == 1) {
+                             dx += 1;
+			            }
+                        else {
+			                dx -= 1;
+			            }
+			        }
+			        if (key.keyCode == 39) { //w prawo
+			            if (dirX == 0) {
+			                dx += 1;
+			            }
+			            else {
+			                dx -= 1;
+                        }
+			        }
+			        if (key.keyCode == 38) {
+			            if (dirY == 0) {
+			                dy += 1;
+			            }
+			            else {
+			                dy -= 1;
+			            }
+			        }
+			        if (key.keyCode == 40) {
+			            if (dirY == 1) {
+			                dy -= 1;
+			            }
+			            else {
+			                dy += 1;
+			            }
+			        }
+
+ 
+                }
+
+			    function draw() {
+			        canvas = document.getElementById('myCanvas');
+			        context = canvas.getContext('2d');
+			        tlo = new Image();
+			        tlo.src = "Gory.jpg"
+			        tlo.onload = function () { context.drawImage(tlo, 0, 0); };
+
+			        setInterval(animation, 100);
+
+			        //cykliczne wywo³anie funkcji animation
+			    }
+
+			    function randomFromTo(from, to) {
+			        return Math.floor(Math.random() * (to - from + 1) + from);
+
+			    }
+
+			    function animation() {
+			        context.clearRect(0, 0, 650, 400);
+
+			        // wyczyszczenie obszaru canvas
+			        context.drawImage(tlo, 0, 0);
+
+			        //przemieszczanie ko³a
+                    x += dx;
+                    y += dy;
+                    if (x > canvas.width) {
+                        i = randomFromTo(0, 3);
+                        dx = -dx;
+                        dirX = 1;
+                    }
+                    if (x < 0) {
+                        i = randomFromTo(0, 3);
+                        dx = -dx;
+                        dirX = 0;
+                    }
+
+                    if (y > canvas.height) {
+                        i = randomFromTo(0, 3);
+                        dy = -dy;
+                        dirY = 1;
+                    }
+
+                    if (y < 0) {
+                        i = randomFromTo(0, 3);
+                        dy = -dy;
+                        dirY = 0;
+                        
+                    }
+
+			        //rysowanie ko³a
+			        context.beginPath();
+			        context.fillStyle = colors[i];
+			        context.arc(x, y, 30, 0, Math.PI * 2, true);
+			        context.closePath;
+			        context.fill();
+			    }
+			</script>
+	</head>
+	<body >
+		<canvas id="myCanvas" width="650" height="400" style="border:1px solid black;">
+			Twoja przegl¹darka nie wspiera elementu canvas!
+		</canvas>
+	</body>
+</html>
